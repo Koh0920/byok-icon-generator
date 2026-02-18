@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BYOK Icon Generator</title>
+<style>
+  body { font-family: system-ui; margin: 0; background: #0b1020; color: #eaf0ff; }
+  .wrap { max-width: 980px; margin: 20px auto; padding: 0 14px; }
+  .card { background: #141b33; border: 1px solid #2a355d; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(130px,1fr)); gap: 10px; }
+  input, button { border-radius: 8px; border: 1px solid #304173; background: #0f1733; color: #eaf0ff; padding: 8px; }
+  button { cursor: pointer; }
+  canvas { width: 100%; aspect-ratio: 1/1; border-radius: 8px; background: #fff; }
+</style>
+<div class="wrap">
+  <h1>アイコン生成（複数サイズ）</h1>
+  <div class="card">
+    <input id="text" value="A" />
+    <input id="bg" type="color" value="#2d6cdf" />
+    <input id="fg" type="color" value="#ffffff" />
+    <button id="make">生成</button>
+  </div>
+  <div id="icons" class="grid"></div>
+</div>
+<script>
+  const SIZES = [64, 128, 256, 512, 1024];
+  function draw(size) {
+    const c = document.createElement("canvas");
+    c.width = size; c.height = size;
+    const x = c.getContext("2d");
+    x.fillStyle = document.getElementById("bg").value;
+    x.fillRect(0, 0, size, size);
+    x.fillStyle = document.getElementById("fg").value;
+    x.textAlign = "center"; x.textBaseline = "middle";
+    x.font = `${Math.floor(size * 0.42)}px system-ui`;
+    x.fillText(document.getElementById("text").value || "A", size / 2, size / 2);
+    return c;
+  }
+  function render() {
+    const box = document.getElementById("icons");
+    box.innerHTML = "";
+    for (const s of SIZES) {
+      const card = document.createElement("div");
+      card.className = "card";
+      const c = draw(s);
+      card.appendChild(c);
+      const a = document.createElement("a");
+      a.href = c.toDataURL("image/png");
+      a.download = `icon-${s}.png`;
+      a.textContent = `${s}x${s} PNG`;
+      a.style.color = "#9dc1ff";
+      a.style.display = "block";
+      a.style.marginTop = "6px";
+      card.appendChild(a);
+      box.appendChild(card);
+    }
+  }
+  document.getElementById("make").onclick = render;
+  render();
+</script>

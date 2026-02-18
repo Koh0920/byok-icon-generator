@@ -1,0 +1,9 @@
+schema_version = "1.0"
+name = "byok-icon-generator"
+version = "0.1.0"
+description = "Generate app icons in multiple sizes"
+type = "app"
+
+[execution]
+runtime = "source"
+entrypoint = "index.html"
