@@ -1,9 +1,11 @@
-schema_version = "1.0"
+schema_version = "0.2"
 name = "byok-icon-generator"
 version = "0.1.0"
 description = "Generate app icons in multiple sizes"
 type = "app"
+default_target = "static"
 
-[execution]
-runtime = "source"
+[targets.static]
+runtime = "web"
 entrypoint = "index.html"
+public = ["index.html"]
